@@ -1,0 +1,76 @@
+# homework_db2
+
+***![Схема БД](https://drive.google.com/file/d/1HEmpZgb7Jp1gmO5npOrCUp1EdBWai1vc/view?usp=sharing)
+
+***Вход в PSQL:
+
+psql -U postgres 
+
+
+***Создание БД:
+
+CREATE DATABASE netology_db2
+    WITH 
+    OWNER = postgres;
+
+\q
+
+***Вход в БД:
+
+psql -U postgres -d netology_db2
+
+***Создание таблиц:
+
+create table gener (
+id serial primary key,
+name varchar(50) unique
+);
+
+create table singer (
+id serial primary key,
+full_name varchar(100),
+nick_name varchar(100)
+);
+
+
+create table singers_geners (
+singer_id integer not null references singer(id),
+geners_id integer not null references gener(id),
+constraint pk primary key (singer_id, geners_id)
+);
+
+create table albom (
+id serial primary key,
+name varchar(100),
+year integer check(year > 1000 AND year < 2100)
+);
+
+
+create table singers_alboms (
+singer_id integer not null references singer(id),
+albom_id integer not null references albom(id),
+constraint pk primary key (singer_id, albom_id)
+);
+
+
+create table track (
+id serial primary key,
+name varchar(100), 
+singer_id integer not null references singer(id),
+albom_id integer not null references albom(id),
+time time
+);
+
+create table collection (
+id serial primary key,
+name varchar(100), 
+year integer check(year > 1000 AND year < 2100)
+);
+
+create table tracks_collection (
+collection_id integer  not null  references collection(id),
+track_id integer not null references track(id),
+constraint pk primary key (collection_id, track_id)
+);
+
+
